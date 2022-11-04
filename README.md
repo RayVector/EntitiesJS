@@ -32,7 +32,7 @@
 - TODO: feature: entity self auto update by API in interval
 - TODO: feature: add Enums logic
 - TODO: feature: data cache
-- TODO: feature: add GQL feature (https:-api.graphqlplaceholder.com)
+- TODO: feature: add GQL feature ("https:-api.graphqlplaceholder.com")
 - TODO: feature: old/new value cache in state (?)
 - DONE: api custom params
 - DONE: setter debounce with promise
@@ -43,7 +43,7 @@
 - DONE: refactor: entity options provide on module connection (Entity.apiSchema = ...)
 - DONE: feature: entityState - new method - create entity copy for form
 - DONE: feature: API interceptors and rejecting
-- DONE: each state (loading etc) for each field?
+- DONE: each state (loading etc.) for each field?
 - DONE: feature: forms populating and editing
 - DONE: feature: entity mock as module with hooks to simulate requests
 - DONE: refactor: all service entity $fields to starts with $
@@ -58,7 +58,7 @@
 
 ## Usage:
 
-### 1. Setup the framework:
+### 1. Set up the framework:
 ```javascript
 // EntitiesJS
 import { Entity, EntityOptions } from 'EntitiesJS'
@@ -120,8 +120,33 @@ export default class ProjectList extends Entity {
   }
 }
 ```
+### 4. To use api compose $options.api field:
+```javascript
+export default class Post extends Entity {
+  $fields = {
+    id: dataTypes.ID,
+    title: dataTypes.STRING,
+    body: dataTypes.STRING
+  }
 
-### 4. Use the Entity in a full API power (VUE example):
+  $options = {
+    api: {
+      alias: 'posts', // <-- alias required!
+      headers: {
+        'testHeader': 'testHeaderValue' // <--- your own header
+      },
+      watcherEnabled: true // <--- auto update when field state has been changed
+      // pollingTime: 10000
+    }
+  }
+
+  constructor(props) {
+    super(props)
+    Entity.prepare(this, props)
+  }
+}
+```
+### 5. Use the Entity (VUE example):
 ```vue
 
 <template>
@@ -179,7 +204,7 @@ export default {
 }
 </script>
 ```
-### 5. Don't wait back-end, use mock data types which built in:
+### 6. Don't wait back-end, use mock data types which built in:
 #### (And change the extends to default Entity when the back-end will be ready) 
 ```javascript
 import { EntityMock } from 'EntitiesJS'
@@ -206,7 +231,7 @@ export default class ProjectMock extends EntityMock { // <-- Another extends!
   }
 }
 ```
-### 6. A lot of built in utils ready:
+### 7. A lot of built-in utils ready:
 ```javascript
 import { falsyCheck } from 'EntitiesJS'
 import { typeofCheck } from 'EntitiesJS'
@@ -228,6 +253,28 @@ import {
   populateSelf
 } from 'EntitiesJS'
 ```
+### 8. Lifecycle hooks:
+```javascript
+export default class Post extends Entity {
+  $fields = {
+    id: dataTypes.ID,
+    title: dataTypes.STRING,
+    body: dataTypes.STRING
+  }
 
+  created () {
+    console.log('created:', this)
+  }
+
+  updated (newValue, oldValue) {
+    console.log('updated:', { newValue, oldValue, entity: this })
+  }
+
+  constructor(props) {
+    super(props)
+    Entity.prepare(this, props)
+  }
+}
+```
 ## API Documentation:
 
