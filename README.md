@@ -18,6 +18,7 @@
   - How API hooks works
   - How data types works
 - TODO: intercept errors in the API layer
+- TODO: feature: add Enums data types
 - TODO: refactor: from JS to TS (?)
 - TODO: composition API (?)
 - TODO: test: api create entity
@@ -29,10 +30,9 @@
   - send only id on $update,
   - refetch parent if child has been updated,
 - TODO: feature: child entity cascade updating (?)
-- TODO: feature: entity self auto update by API in interval
-- TODO: feature: add Enums logic
-- TODO: feature: data cache
+- TODO: feature: entity self auto update by API in interval (polling?)
 - TODO: feature: add GQL feature ("https:-api.graphqlplaceholder.com")
+- TODO: feature: data cache (?)
 - TODO: feature: old/new value cache in state (?)
 - DONE: api custom params
 - DONE: setter debounce with promise
@@ -120,7 +120,7 @@ export default class ProjectList extends Entity {
   }
 }
 ```
-### 4. To use api compose $options.api field:
+### 4. To use api, compose $options.api field:
 ```javascript
 export default class Post extends Entity {
   $fields = {
