@@ -60,9 +60,9 @@
 
 ### 1. Set up the framework:
 ```javascript
-// EntitiesJS
-import { Entity, EntityOptions } from 'EntitiesJS'
-import { ApiRestHooks } from 'EntitiesJS'
+// main.js
+import { Entity, EntityOptions } from 'entitiesjs'
+import { ApiRestHooks } from 'entitiesjs'
 
 Entity.globalOptions = new EntityOptions({
   api: {
@@ -78,8 +78,9 @@ Entity.apiSchema = new ApiRestHooks() // <--- here we select the RESTFull API mo
 ### 2. Just define Entity with fields with data types (+ with custom data types):
 #### (You won't be able to update field by another data type)
 ```javascript
-import { Entity } from 'EntitiesJS'
-import dataTypes from 'EntitiesJS'
+// src/entities/Project.js
+import { Entity } from 'entitiesjs'
+import dataTypes from 'entitiesjs'
 import colorDataType from '@/utils/custom-data-types/colorDataType'
 import timeDataType from '@/utils/custom-data-types/timeDataType'
 
@@ -103,8 +104,9 @@ export default class Project extends Entity {
 
 ### 3. Compose parent Entity:
 ```javascript
-import { Entity } from 'EntitiesJS'
-import dataTypes from 'EntitiesJS'
+// src/entities/ProjectList.js
+import { Entity } from 'entitiesjs'
+import dataTypes from 'entitiesjs'
 import Project from '@/entities/Project' // <--- Your custom directory for storing all entities
 
 export default class ProjectList extends Entity {
@@ -122,6 +124,7 @@ export default class ProjectList extends Entity {
 ```
 ### 4. To use api, compose $options.api field:
 ```javascript
+// src/entities/Post.js
 export default class Post extends Entity {
   $fields = {
     id: dataTypes.ID,
@@ -148,7 +151,6 @@ export default class Post extends Entity {
 ```
 ### 5. Use the Entity (VUE example):
 ```vue
-
 <template>
   <v-container>
     <v-col>
@@ -182,7 +184,7 @@ export default class Post extends Entity {
 </template>
 
 <script>
-import Post from '@/entities/Post'
+import Post from '@/entities/Post.js'
 
 export default {
   name: 'testEdit',
@@ -207,9 +209,10 @@ export default {
 ### 6. Don't wait back-end, use mock data types which built in:
 #### (And change the extends to default Entity when the back-end will be ready) 
 ```javascript
-import { EntityMock } from 'EntitiesJS'
-import { Entity } from 'EntitiesJS'
-import { dataTypes } from 'EntitiesJS'
+// src/entities/mock/ProjectMock.js
+import { EntityMock } from 'entitiesjs'
+import { Entity } from 'entitiesjs'
+import { dataTypes } from 'entitiesjs'
 
 export default class ProjectMock extends EntityMock { // <-- Another extends!
   $fields = {
@@ -233,10 +236,10 @@ export default class ProjectMock extends EntityMock { // <-- Another extends!
 ```
 ### 7. A lot of built-in utils ready:
 ```javascript
-import { falsyCheck } from 'EntitiesJS'
-import { typeofCheck } from 'EntitiesJS'
-import { debounce } from 'EntitiesJS'
-import { incrementor } from 'EntitiesJS'
+import { falsyCheck } from 'entitiesjs'
+import { typeofCheck } from 'entitiesjs'
+import { debounce } from 'entitiesjs'
+import { incrementor } from 'entitiesjs'
 import {
   randomString,
   randomNumber,
@@ -246,15 +249,16 @@ import {
   randomEntity,
   randomWordsList,
   mockDataHooks
-} from 'EntitiesJS'
+} from 'entitiesjs'
 import {
   deepPopulate,
   deepEmptyPopulate,
   populateSelf
-} from 'EntitiesJS'
+} from 'entitiesjs'
 ```
 ### 8. Lifecycle hooks:
 ```javascript
+// src/entities/Post.js
 export default class Post extends Entity {
   $fields = {
     id: dataTypes.ID,
