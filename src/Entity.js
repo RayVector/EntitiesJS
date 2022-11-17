@@ -57,6 +57,7 @@ import errors from './configs/errors'
 import { debounce } from './utils/debounce'
 
 import { deepEmptyPopulate, deepPopulate, populateSelf } from './utils/population'
+import { falsyCheck } from "./utils/falsyCheck";
 
 let fieldDebouncer = null
 
@@ -259,7 +260,8 @@ export class Entity {
    */
   static async setEntityValue (entity, entityKey, value) {
     const fieldsValue = entity.$fields[entityKey]
-    const isValidValue = typeof value.then === 'function' ||
+    const isValidValue = falsyCheck(value) ? typeof value.then === 'function' ||
+      typeof value === typeof fieldsValue.type(value) :
       typeof value === typeof fieldsValue.type(value)
     // set pre-values
     if (!entity.$isPrepared) entity['_' + entityKey] = value
