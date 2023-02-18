@@ -1,11 +1,11 @@
 {
   "name": "entitiesjs",
-  "version": "5.0.1",
+  "version": "5.0.4",
   "description": "EntitiesJs - it's a framework for work with data",
-  "main": "./dist/index.js",
+  "main": "index.js",
   "module": "index.js",
   "files": [
-    "dist"
+    "./index.js"
   ],
   "scripts": {
     "prepublishOnly": "webpack --mode=production",
