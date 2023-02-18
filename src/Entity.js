@@ -371,7 +371,7 @@ export class Entity {
    * Gets and return array of the initiated Item prop
    * @returns {Promise<*>}
    */
-  static async entityList (Item, queryParams) {
+  static async entityList (Item, queryParams = null) {
     return new Promise((response) => {
       const entity = new Item()
       setTimeout(async () => {

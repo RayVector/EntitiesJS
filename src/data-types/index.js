@@ -40,7 +40,7 @@ export class DataType {
 
 // value handlers
 export const arrayOfItemsValueHandler = (entity, field, value) => value.every(item => item instanceof entity.$item)
-export const dateValueHandler = (entity, field, value) => value instanceof Date
+// export const dateValueHandler = (entity, field, value) => value instanceof Date
 export const idValueHandler = (entity, field, value) => value !== null ? Number.isInteger(value) : true
 
 // payload handlers
@@ -52,7 +52,7 @@ export const types = {
   STRING: new DataType(String, ''),
   INTEGER: new DataType(Number, 0),
   BOOLEAN: new DataType(Boolean, false),
-  DATE: new DataType(Date, new Date(), null, dateValueHandler),
+  DATE: new DataType(Date, new Date(), null),
   ARRAY: new DataType(Array, []),
   ARRAY_ITEMS: new DataType(Array, [], null, arrayOfItemsValueHandler, arrayItemsPayloadHandler),
   JSON: new DataType(JSONType, JSON.stringify({})),

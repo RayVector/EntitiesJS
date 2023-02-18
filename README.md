@@ -80,7 +80,7 @@ Entity.apiSchema = new ApiRestHooks() // <--- here we select the RESTFull API mo
 ```javascript
 // src/entities/Project.js
 import { Entity } from 'entitiesjs'
-import dataTypes from 'entitiesjs'
+import { dataTypes } from 'entitiesjs'
 import colorDataType from '@/utils/custom-data-types/colorDataType'
 import timeDataType from '@/utils/custom-data-types/timeDataType'
 
@@ -106,7 +106,7 @@ export default class Project extends Entity {
 ```javascript
 // src/entities/ProjectList.js
 import { Entity } from 'entitiesjs'
-import dataTypes from 'entitiesjs'
+import { dataTypes } from 'entitiesjs'
 import Project from '@/entities/Project' // <--- Your custom directory for storing all entities
 
 export default class ProjectList extends Entity {
@@ -282,3 +282,13 @@ export default class Post extends Entity {
 ```
 ## API Documentation:
 
+### Data Types:
+ID <br>
+STRING <br>
+INTEGER <br>
+BOOLEAN <br>
+DATE <br>
+ARRAY <br>
+ARRAY_ITEMS <br>
+JSON <br>
+OBJECT <br>
