@@ -52,14 +52,14 @@ export class ApiGqlPost extends ApiGql {
   method = 'POST'
   async invoke (entity, value, field, baseUrl, alias, id) {
     const {queryParams, variables, aliasForOne} = entity.$options.api.gql
-    let body = new ApiGqlQueryName().buildQuery(entity, alias, queryParams, variables, id, aliasForOne)
+    let body = new ApiGqlQuery().buildQuery(entity, alias, queryParams, variables, id, aliasForOne)
     const options = new ApiGQLFetchOptions(this.method, entity.$options.api.headers, JSON.stringify(body))
     return await this.call(entity, baseUrl, alias, options)
   }
 }
 
 
-export class ApiGqlQueryName extends ApiGql {
+export class ApiGqlQuery extends ApiGql {
   buildQuery (entity, alias, queryParams, variables, id = null, aliasForOne) {
     const data = Object.keys(entity.$fields).join(' ')
     let queryParamsString = ''
@@ -96,6 +96,23 @@ export class ApiGqlQueryName extends ApiGql {
       operationName: null,
       query,
       variables
+    }
+  }
+
+  // todo gql mutation
+  buildMutation () {
+    let query = `mutation (
+      $id: ID!,
+      $data: UpdatePostInput!
+    ) {
+      updatePost(id: $id, data: $data) {
+        id
+        body
+      }
+    }`
+    return {
+      operationName: null,
+      query
     }
   }
 }
