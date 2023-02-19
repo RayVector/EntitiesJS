@@ -40,7 +40,7 @@ export {
 export { ApiRestHooks } from './api/rest/ApiRest'
 
 // API graphQL Hooks
-// ...
+export { ApiGqlHooks } from './api/gql/ApiGQL'
 
 // Entity.js
 export {

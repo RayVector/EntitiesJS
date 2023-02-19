@@ -10,9 +10,20 @@ export default class Post extends Entity {
   $options = {
     api: {
       alias: 'posts', // <-- alias required!
-      watcherEnabled: true,
-      debounceTime: 2000
-      // pollingTime: 10000
+      gql: {
+        aliasForOne: 'post',
+        variables: {
+          "options": {
+            "paginate": {
+              "page": 1,
+              "limit": 5
+            }
+          }
+        },
+        queryParams: {
+          options: 'PageQueryOptions'
+        }
+      }
     }
   }
 

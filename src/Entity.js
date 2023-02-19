@@ -59,7 +59,11 @@ export class EntityOptions {
     pollingId: null,
     isLoadingStatesEnabled: false,
     // headers
-    headers: null
+    headers: null,
+    gql: {
+      variables: {},
+      queryParams: {}
+    }
   }
 
   constructor (options = null) {
