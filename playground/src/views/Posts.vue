@@ -16,6 +16,7 @@
 import { onMounted, reactive } from "vue";
 import Post from "@/entities/Post";
 import { useRouter } from "vue-router";
+import { $entityList } from "../../../src/Entity";
 
 const router = useRouter()
 
@@ -24,7 +25,7 @@ const state = reactive({
 })
 
 onMounted(async () => {
-  state.postList = await Post.entityList(Post)
+  state.postList = await $entityList(Post)
 })
 
 </script>

@@ -42,10 +42,15 @@ export { ApiRestHooks } from './api/rest/ApiRest'
 // API graphQL Hooks
 // ...
 
-// Entity
+// Entity.js
 export {
   Entity,
   EntityApi,
   EntityOptions,
-  LoadingStates
+  LoadingStates,
+  $entityList,
+  $readById,
+  $prepare,
+  $entityPollingList,
+  $setEntityValue
 } from './Entity'

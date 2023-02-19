@@ -1,4 +1,4 @@
-import { Entity } from '@/EntitiesJS/Entity.js'
+import { Entity, $prepare } from '@/EntitiesJS/Entity.js'
 import dataTypes from '@/EntitiesJS/data-types'
 import Project from '@/entities/Project'
 
@@ -11,6 +11,6 @@ export default class ProjectList extends Entity {
 
   constructor(props) {
     super(props)
-    Entity.prepare(this, props)
+    $prepare(this, props)
   }
 }

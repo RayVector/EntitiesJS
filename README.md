@@ -12,6 +12,7 @@
 
 ## Plan:
 
+- TODO: move to composition API
 - TODO: create full documentation:
   - Entity methods (+ static)
   - EntityMock methods (+ static)
@@ -20,7 +21,6 @@
 - TODO: intercept errors in the API layer
 - TODO: feature: add Enums data types
 - TODO: refactor: from JS to TS (?)
-- TODO: composition API (?)
 - TODO: test: api create entity
 - TODO: test: api delete entity
 - TODO: feature: add nested Entities feature:
@@ -58,7 +58,7 @@
 
 ## Usage:
 
-### 1. Set up the framework:
+### Set up the framework options and api schema:
 ```javascript
 // main.js
 import { Entity, EntityOptions } from 'entitiesjs'
@@ -69,13 +69,13 @@ Entity.globalOptions = new EntityOptions({
     isEnabled: true, // turn on API
     baseUrl: 'https://jsonplaceholder.typicode.com', // base url for all API operations
     watcherEnabled: false, // auto update values to API
-    isLoadingStatesEnabled: true // add loading state on each Entity field
+    isLoadingStatesEnabled: false // add loading state on each Entity field
   }
 })
-Entity.apiSchema = new ApiRestHooks() // <--- here we select the RESTFull API module!
+Entity.apiSchema = new ApiRestHooks() // <--- here we select the RESTFull API module
 ```
 
-### 2. Just define Entity with fields with data types (+ with custom data types):
+### Just define the Entity with fields with data types (+ with custom data types):
 #### (You won't be able to update field by another data type)
 ```javascript
 // src/entities/Project.js
@@ -102,7 +102,41 @@ export default class Project extends Entity {
 }
 ```
 
-### 3. Compose parent Entity:
+### Get entity list from api with $entityList:
+```vue
+<template>
+  <div>
+    <p
+      style="cursor: pointer"
+      v-for="post in state.postList"
+      :key="post.id"
+      @click="router.push({ name: 'post', params: { id: post.id } })"
+    >
+      {{ post.title }}
+    </p>
+</div>
+</template>
+
+<script setup>
+  import { onMounted, reactive } from "vue";
+  import Post from "@/entities/Post";
+  import { useRouter } from "vue-router";
+  import { $entityList } from "entitiesjs";
+
+  const router = useRouter()
+
+  const state = reactive({
+    postList: []
+  })
+
+  onMounted(async () => {
+    state.postList = await $entityList(Post)
+  })
+</script>
+
+```
+
+### You can compose a parent Entity:
 ```javascript
 // src/entities/ProjectList.js
 import { Entity } from 'entitiesjs'
@@ -122,7 +156,7 @@ export default class ProjectList extends Entity {
   }
 }
 ```
-### 4. To use api, compose $options.api field:
+### To use api, compose $options.api field:
 ```javascript
 // src/entities/Post.js
 export default class Post extends Entity {
@@ -149,7 +183,7 @@ export default class Post extends Entity {
   }
 }
 ```
-### 5. Use the Entity (VUE example):
+### Use the Entity (VUE example):
 ```vue
 <template>
   <v-container>
@@ -185,6 +219,7 @@ export default class Post extends Entity {
 
 <script>
 import Post from '@/entities/Post.js'
+import { $readById } from 'entitiesjs'
 
 export default {
   name: 'testEdit',
@@ -199,20 +234,21 @@ export default {
   },
   async mounted () {
     const itemId = Number(this.$route.params.testId)
-    const item = await Post.readById(itemId) // <--- API layer magic!
+    const item = await $readById(Post, itemId)
     this.itemToEdit = item
     this.fields = item.createState(this.fields) // You can create state based by payload
   }
 }
 </script>
 ```
-### 6. Don't wait back-end, use mock data types which built in:
+### Don't wait back-end, use mock data types which built in:
 #### (And change the extends to default Entity when the back-end will be ready) 
 ```javascript
 // src/entities/mock/ProjectMock.js
 import { EntityMock } from 'entitiesjs'
 import { Entity } from 'entitiesjs'
 import { dataTypes } from 'entitiesjs'
+import { $prepare } from 'entitiesjs'
 
 export default class ProjectMock extends EntityMock { // <-- Another extends!
   $fields = {
@@ -230,11 +266,11 @@ export default class ProjectMock extends EntityMock { // <-- Another extends!
 
   constructor(props) {
     super(props)
-    Entity.prepare(this, props)
+    $prepare(this, props)
   }
 }
 ```
-### 7. A lot of built-in utils ready:
+### A lot of built-in utils ready:
 ```javascript
 import { falsyCheck } from 'entitiesjs'
 import { typeofCheck } from 'entitiesjs'
@@ -256,7 +292,7 @@ import {
   populateSelf
 } from 'entitiesjs'
 ```
-### 8. Lifecycle hooks:
+### Lifecycle hooks:
 ```javascript
 // src/entities/Post.js
 export default class Post extends Entity {
@@ -292,3 +328,8 @@ ARRAY <br>
 ARRAY_ITEMS <br>
 JSON <br>
 OBJECT <br>
+
+### Methods:
+Get entity list with api - $entityList(Entity); <br>
+Get entity by id with api - $readById(Entity, id); <br>
+List with data polling - $entityPollingList(Entity, cb); <br>

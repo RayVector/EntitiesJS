@@ -1,4 +1,4 @@
-import { Entity, dataTypes } from '../../../src'
+import { Entity, dataTypes, $prepare } from '../../../src'
 
 export default class Post extends Entity {
   $fields = {
@@ -18,6 +18,6 @@ export default class Post extends Entity {
 
   constructor(props) {
     super(props)
-    Entity.prepare(this, props)
+    $prepare(this, props)
   }
 }

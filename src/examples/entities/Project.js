@@ -1,4 +1,4 @@
-import { Entity } from '@/EntitiesJS/Entity.js'
+import { Entity, $prepare } from '@/EntitiesJS/Entity.js'
 import dataTypes from '@/EntitiesJS/data-types'
 import colorDataType from '@/utils/custom-data-types/colorDataType'
 import timeDataType from '@/utils/custom-data-types/timeDataType'
@@ -16,6 +16,6 @@ export default class Project extends Entity {
 
   constructor(props) {
     super(props)
-    Entity.prepare(this, props)
+    $prepare(this, props)
   }
 }

@@ -17,6 +17,7 @@
 import { useRoute } from "vue-router";
 import { onMounted, reactive } from "vue";
 import Post from "@/entities/Post";
+import { $readById } from "../../../src";
 
 const route = useRoute()
 
@@ -30,7 +31,7 @@ let fields = reactive({
 
 onMounted(async () => {
   const itemId = Number(route.params.id)
-  const item = await Post.readById(itemId)
+  const item = await $readById(Post, itemId)
   state.itemToEdit = item
   fields = item.createState(fields)
 })
