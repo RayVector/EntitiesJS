@@ -334,6 +334,44 @@ export const colorValueHandler = (entity, field, value) => {
   return value.match(regx) !== null
 }
 ```
+### GQL api schema type:
+```javascript
+import { Entity, dataTypes, $prepare } from '../../../src'
+
+export default class Post extends Entity {
+  $fields = {
+    id: dataTypes.ID,
+    title: dataTypes.STRING,
+    body: dataTypes.STRING
+  }
+
+  $options = {
+    api: {
+      alias: 'posts', // <-- alias required!
+      gql: {
+        aliasForOne: 'post', // alias for one entity
+        variables: {
+          "options": {
+            "paginate": {
+              "page": 1,
+              "limit": 5
+            }
+          }
+        },
+        queryParams: {
+          options: 'PageQueryOptions'
+        }
+      }
+    }
+  }
+
+  constructor(props) {
+    super(props)
+    $prepare(this, props)
+  }
+}
+
+```
 ## API Documentation:
 
 ### Data Types:
