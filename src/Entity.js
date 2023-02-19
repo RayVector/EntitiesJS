@@ -536,7 +536,7 @@ const $createError = (msg = '') => {
  * @param throwError
  * @returns {((cap: GLenum) => GLboolean)|*|boolean}
  */
-const $validateEntityApiEnabled = (entity = {}, throwError = true) => {
+export const $validateEntityApiEnabled = (entity = {}, throwError = true) => {
   const isApiEnabled = entity.$options?.api?.isEnabled || false
   // if no api
   if (!entity.$options.api.alias && !isApiEnabled) {
