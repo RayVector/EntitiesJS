@@ -59,7 +59,7 @@ import { debounce } from './utils/debounce'
 import { deepEmptyPopulate, deepPopulate, populateSelf } from './utils/population'
 import { falsyCheck } from "./utils/falsyCheck";
 
-let fieldDebouncer = null
+let apiDebouncer = null
 
 /**
  * module: api interface
@@ -214,7 +214,7 @@ export class Entity {
    */
   static updateDebouncedField (v, entity, entityKey) {
     (function (entity, v, entityKey) {
-      entity[entityKey] = entity.$update(entity, v, entityKey)
+      entity.$update(entity, v, entityKey)
     }(entity, v, entityKey))
   }
 
@@ -248,7 +248,7 @@ export class Entity {
       }
     }
     if (Entity.validateEntityApiEnabled(entity, false)) {
-      fieldDebouncer = debounce(Entity.updateDebouncedField, entity?.$options?.api?.debounceTime)
+      apiDebouncer = debounce(Entity.updateDebouncedField, entity?.$options?.api?.debounceTime)
     }
   }
 
@@ -281,7 +281,8 @@ export class Entity {
             entity.changeApiLoadingStatus(false)
             entity.updateLoadingByData(false, {}, entityKey)
           } else {
-            fieldDebouncer(value, entity, entityKey)
+            apiDebouncer(value, entity, entityKey)
+            entity['_' + entityKey] = value
           }
         } else {
           // set value
@@ -292,7 +293,6 @@ export class Entity {
           fieldsValue.handler(value)
         }
         // resolve promises if value is promise
-        // todo: remove? useless
         if (entity['_' + entityKey] !== null && typeof entity['_' + entityKey].then === 'function') {
           entity['_' + entityKey].then(res => {
             entity['_' + entityKey] = res[entityKey]

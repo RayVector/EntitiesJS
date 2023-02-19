@@ -10,10 +10,8 @@ export default class Post extends Entity {
   $options = {
     api: {
       alias: 'posts', // <-- alias required!
-      headers: {
-        'testHeader': 'testHeaderValue' // <--- your own header
-      },
-      watcherEnabled: true // <--- auto update when field state has been changed
+      watcherEnabled: true,
+      debounceTime: 2000
       // pollingTime: 10000
     }
   }
