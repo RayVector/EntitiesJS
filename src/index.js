@@ -52,5 +52,6 @@ export {
   $readById,
   $prepare,
   $entityPollingList,
-  $setEntityValue
+  $setEntityValue,
+  $validateEntityApiEnabled
 } from './Entity'
