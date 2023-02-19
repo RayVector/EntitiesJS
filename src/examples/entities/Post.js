@@ -1,4 +1,4 @@
-import { Entity } from '@/EntitiesJS/Entity.js'
+import { Entity, $prepare } from '@/EntitiesJS/Entity.js'
 import dataTypes from '@/EntitiesJS/data-types'
 
 export default class Post extends Entity {
@@ -28,6 +28,6 @@ export default class Post extends Entity {
 
   constructor(props) {
     super(props)
-    Entity.prepare(this, props)
+    $prepare(this, props)
   }
 }

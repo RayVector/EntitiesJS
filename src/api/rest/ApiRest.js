@@ -105,7 +105,6 @@ export class ApiRestHooks extends ApiHooks {
       // update
       const { baseUrl, alias } = entity.$options.api
       if (typeof value === 'object') {
-
         return new ApiRestPut().invoke(entity, value, null, baseUrl, alias, queryParams)
       }
       // update by field
