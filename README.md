@@ -48,7 +48,7 @@
 - DONE: feature: entity mock as module with hooks to simulate requests
 - DONE: refactor: all service entity $fields to starts with $
 - DONE: refactor: modules system
-- DONE: refactor: simplify copy/paste code in the entity definition (constructor, super, Entity.prepare)
+- DONE: refactor: simplify copy/paste code in the entity definition (constructor, super, $prepare)
 - DONE: feature: add Entity definition by short (entity) syntax
 - DONE: feature: add data type - json
 - DONE: bug: loading on preload (for example in static entityList)
@@ -79,8 +79,10 @@ Entity.apiSchema = new ApiRestHooks() // <--- here we select the RESTFull API mo
 #### (You won't be able to update field by another data type)
 ```javascript
 // src/entities/Project.js
-import { Entity } from 'entitiesjs'
-import { dataTypes } from 'entitiesjs'
+import {
+  Entity,
+  dataTypes
+} from 'entitiesjs'
 import colorDataType from '@/utils/custom-data-types/colorDataType'
 import timeDataType from '@/utils/custom-data-types/timeDataType'
 
@@ -97,7 +99,7 @@ export default class Project extends Entity {
 
   constructor (props) {
     super(props)
-    Entity.prepare(this, props) // <--- init entity!
+    $prepare(this, props) // <--- init entity!
   }
 }
 ```
@@ -139,8 +141,10 @@ export default class Project extends Entity {
 ### You can compose a parent Entity:
 ```javascript
 // src/entities/ProjectList.js
-import { Entity } from 'entitiesjs'
-import { dataTypes } from 'entitiesjs'
+import {
+  Entity,
+  dataTypes
+} from 'entitiesjs'
 import Project from '@/entities/Project' // <--- Your custom directory for storing all entities
 
 export default class ProjectList extends Entity {
@@ -152,7 +156,7 @@ export default class ProjectList extends Entity {
 
   constructor (props) {
     super(props)
-    Entity.prepare(this, props)
+    $prepare(this, props)
   }
 }
 ```
@@ -179,7 +183,7 @@ export default class Post extends Entity {
 
   constructor(props) {
     super(props)
-    Entity.prepare(this, props)
+    $prepare(this, props)
   }
 }
 ```
@@ -245,10 +249,12 @@ export default {
 #### (And change the extends to default Entity when the back-end will be ready) 
 ```javascript
 // src/entities/mock/ProjectMock.js
-import { EntityMock } from 'entitiesjs'
-import { Entity } from 'entitiesjs'
-import { dataTypes } from 'entitiesjs'
-import { $prepare } from 'entitiesjs'
+import {
+  EntityMock,
+  Entity,
+  dataTypes,
+  $prepare
+} from 'entitiesjs'
 
 export default class ProjectMock extends EntityMock { // <-- Another extends!
   $fields = {
@@ -272,11 +278,11 @@ export default class ProjectMock extends EntityMock { // <-- Another extends!
 ```
 ### A lot of built-in utils ready:
 ```javascript
-import { falsyCheck } from 'entitiesjs'
-import { typeofCheck } from 'entitiesjs'
-import { debounce } from 'entitiesjs'
-import { incrementor } from 'entitiesjs'
 import {
+  falsyCheck,
+  typeofCheck,
+  debounce,
+  incrementor,
   randomString,
   randomNumber,
   randomWords,
@@ -284,9 +290,7 @@ import {
   randomArray,
   randomEntity,
   randomWordsList,
-  mockDataHooks
-} from 'entitiesjs'
-import {
+  mockDataHooks,
   deepPopulate,
   deepEmptyPopulate,
   populateSelf
@@ -312,7 +316,7 @@ export default class Post extends Entity {
 
   constructor(props) {
     super(props)
-    Entity.prepare(this, props)
+    $prepare(this, props)
   }
 }
 ```
