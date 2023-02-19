@@ -329,6 +329,7 @@ export const $entityList = (Entity, queryParams = null) => {
 }
 
 /**
+ * get entity by id from api
  * @param Entity
  * @param id
  * @returns {Promise<unknown>}
@@ -344,6 +345,9 @@ export const $readById = (Entity, id = null) => {
 }
 
 /**
+ * Prepare input entity
+ * Creates options, validate entity, attaches loading states,
+ * set watchers, update prepared state, call created hook
  * @param entity
  * @param extValues
  * @returns {{$isPrepared}|*}
@@ -372,6 +376,12 @@ export const $prepare = (entity, extValues) => {
   return entity
 }
 
+/**
+ * Callback for list with polling
+ * @param Entity
+ * @param cb
+ * @returns {Promise<void>}
+ */
 export const $entityPollingList = async (Entity, cb) => {
   const entity = new Entity()
   if (entity.$options.api.pollingTime > 0) {
@@ -384,12 +394,17 @@ export const $entityPollingList = async (Entity, cb) => {
   }
 }
 
+/**
+ * attaches module LoadingStates
+ * @param entity
+ */
 const $setLoadingStates = (entity) => {
   for (const field in entity.$fields) {
     entity.$loadingStates[field] = new LoadingStates()
   }
 }
 
+// func for debouncer
 const $updateDebouncedField = (v, entity, entityKey) => {
   (function (entity, v, entityKey) {
     entity.$update(entity, v, entityKey)
