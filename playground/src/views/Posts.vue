@@ -16,7 +16,7 @@
 import { onMounted, reactive } from "vue";
 import Post from "@/entities/Post";
 import { useRouter } from "vue-router";
-import { $entityList } from "../../../src/Entity";
+import { $entityList } from "../../../src";
 
 const router = useRouter()
 
