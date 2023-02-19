@@ -1,4 +1,4 @@
-import { Entity } from '../Entity'
+import { $validateEntityApiEnabled } from '../index'
 import { falsyCheck } from '../utils/falsyCheck'
 
 export class ApiMethod {
@@ -15,7 +15,7 @@ export class ApiHooks {
    * @returns {(function(GLenum): GLboolean)|*|boolean}
    */
   static validateEntity (entity) {
-    return entity.$options.api.alias && Entity.validateEntityApiEnabled(entity)
+    return entity.$options.api.alias && $validateEntityApiEnabled(entity)
   }
 
   /**
