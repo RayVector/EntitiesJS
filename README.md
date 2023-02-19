@@ -320,6 +320,20 @@ export default class Post extends Entity {
   }
 }
 ```
+### Custom data-type:
+```javascript
+// src/utils/custom-data-types/color.js
+import { DataType } from '@/EntitiesJS/data-types'
+import { colorValueHandler } from '@/utils/custom-value-handlers/colorValueHandler'
+
+export default new DataType(String, '#FFFFFF', null, colorValueHandler)
+
+// src/utils/custom-value-hadlers/color.js
+export const colorValueHandler = (entity, field, value) => {
+  const regx = /^#[0-9a-f]{3,6}$/i
+  return value.match(regx) !== null
+}
+```
 ## API Documentation:
 
 ### Data Types:
