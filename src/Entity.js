@@ -47,11 +47,8 @@ export class EntityOptions {
     // alias it's a main definition for API using
     // if alias is falsy, API will not work
     alias: '',
-    aliasList: '',
     // toggle sending API after new value
     watcherEnabled: true,
-    // call read of the entity in the initialization
-    isPrefetch: false,
     // debounce
     debounceTime: 1000, // 1s
     // polling time to auto updating
