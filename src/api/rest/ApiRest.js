@@ -1,6 +1,5 @@
 import { ApiMethod, ApiHooks } from '../ApiMethod.js'
 import { Entity } from '../../Entity'
-import { URLSearchParams } from 'core-js/modules/web.url-search-params'
 
 export class ApiRestFetchOptions {
   method = 'GET'
@@ -28,7 +27,7 @@ export class ApiRest extends ApiMethod {
     const baseUrl = extBaseUrl || entityOptionsApi.baseUrl
     const alias = extAlias ? `/${extAlias}` : `/${entityOptionsApi.alias}`
     const param = extParam ? `/${extParam}` : ''
-    const queryParams = extQueryParams ? `?${new URLSearchParams(extQueryParams)}` : ''
+    const queryParams = extQueryParams ? `?${new URLSearchParams(extQueryParams).toString()}` : ''
     return `${baseUrl}${alias}${param}${queryParams}`
   }
 
