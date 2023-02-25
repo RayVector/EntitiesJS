@@ -8,10 +8,24 @@
       <br>
       <br>
       <div v-if="state.itemToEdit !== null">
-        <input type="text" v-model="state.itemToEdit.title"> <br>
+        {{ state.itemToEdit.$isApiLoading }} <br>
+        {{ state.itemToEdit.$loadingStates.title.$isLoading }} <br>
+        <span v-if="state.itemToEdit.$loadingStates.title.$isLoading">loading</span>
+        <label>
+          title
+          <input type="text" v-model="state.itemToEdit.title"> <br>
+        </label>
         <br>
-        <input type="text" v-model="fields.title"> <br>
+        <span v-if="state.itemToEdit.$loadingStates.body.$isLoading">loading</span>
+        <label>
+          body
+          <input type="text" v-model="state.itemToEdit.body">
+        </label>
         <br>
+        <br>
+        <button @click="state.itemToEdit.update()">
+          send
+        </button>
       </div>
     </div>
   </div>
@@ -31,16 +45,10 @@ const state = reactive({
   itemToEdit: null
 })
 
-let fields = reactive({
-  title: ''
-})
-
 onMounted(async () => {
   state.isPostLoading = true
   const itemId = Number(route.params.id)
-  const item = await $readById(Post, itemId)
-  state.itemToEdit = item
-  fields = item.createState(fields)
+  state.itemToEdit = await $readById(Post, itemId)
   state.isPostLoading = false
 })
 

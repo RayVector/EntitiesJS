@@ -11,7 +11,7 @@ Entity.globalOptions = new EntityOptions({
     isEnabled: true, // turn on API
     baseUrl: 'https://jsonplaceholder.typicode.com', // 'https://graphqlzero.almansi.me/api', // base url for all API operations
     watcherEnabled: false, // auto update values to API
-    isLoadingStatesEnabled: true // add loading state on each Entity field
+    isLoadingStatesEnabled: false // add loading state on each Entity field
   }
 })
 // Entity.apiSchema = new ApiGqlHooks()
