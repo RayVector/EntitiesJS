@@ -360,6 +360,28 @@ export default class Post extends Entity {
   }
 }
 ```
+### You can send changed fields for payload to .update(payload):
+```javascript
+export default class Post extends Entity {
+  $fields = {
+    id: dataTypes.ID,
+    title: dataTypes.STRING,
+    body: dataTypes.STRING
+  }
+
+  $options = {
+    api: {
+      alias: 'posts',
+      isFilterByDiffs: true
+    }
+  }
+
+  constructor(props) {
+    super(props)
+    $prepare(this, props)
+  }
+}
+```
 ## API Documentation:
 
 ### Data Types:

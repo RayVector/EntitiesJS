@@ -54,6 +54,8 @@ export class EntityOptions {
     // polling time to auto updating
     pollingTime: 0,
     pollingId: null,
+    // filter payload by diffs
+    isFilterByDiffs: false,
     isLoadingStatesEnabled: false,
     // headers
     headers: null,
@@ -166,7 +168,16 @@ export class Entity {
       this.$loadingController = null
     }
     // create payload
-    const dataPayload = payload ? payload : this.createApiPayload(data, leftFields)
+    let dataPayload = payload ? payload : this.createApiPayload(data, leftFields)
+    // find diffs
+    if (this.$options.api.isFilterByDiffs) {
+      for (const field in data) {
+        if (this[field] !== data[field]) {
+          dataPayload = {}
+          dataPayload[field] = data[field]
+        }
+      }
+    }
     if (!$validateEntityApiEnabled(this)) {
       $createError('api is disabled')
       return
@@ -556,4 +567,13 @@ export const $validateEntityApiEnabled = (entity = {}, throwError = true) => {
 const $setOptions = (entity) => {
   // new options will rewrite global options
   deepPopulate(entity.$options, Entity.globalOptions)
+}
+
+export const $createState = (Entity, data = {}) => {
+  const entity = new Entity()
+  const payload = entity.createPayload()
+  if (!Object.keys(data).length) {
+    return payload
+  }
+  return deepEmptyPopulate(payload, data)
 }
