@@ -164,13 +164,14 @@ export class Entity {
       this.$loadingController.abort()
       this.$loadingController = null
     }
+    // create payload
     const payload = this.createApiPayload(data, leftFields)
     if (!$validateEntityApiEnabled(this)) {
       $createError('api is disabled')
       return
     }
-    this.changeApiLoadingStatus(true)
     this.updateLoadingByData(true, payload)
+    this.changeApiLoadingStatus(true)
     const res = await this.$update(this, payload, null, queryParams)
     this.changeApiLoadingStatus(false)
     this.updateLoadingByData(false, payload)
@@ -408,8 +409,8 @@ const $setLoadingStates = (entity) => {
 
 // func for debouncer
 const $updateDebouncedField = (v, entity, entityKey) => {
-  (function (entity, v, entityKey) {
-    entity.$update(entity, v, entityKey)
+  (function (entity, v) {
+    entity.update(v)
   }(entity, v, entityKey))
 }
 
