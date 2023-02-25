@@ -334,6 +334,29 @@ export const colorValueHandler = (entity, field, value) => {
   return value.match(regx) !== null
 }
 ```
+
+### Enable watcher for certain entity:
+```javascript
+export default class Post extends Entity {
+  $fields = {
+    id: dataTypes.ID,
+    title: dataTypes.STRING,
+    body: dataTypes.STRING
+  }
+
+  $options = {
+    api: {
+      alias: 'posts',
+      watcherEnabled: true
+    }
+  }
+
+  constructor(props) {
+    super(props)
+    $prepare(this, props)
+  }
+}
+```
 ## API Documentation:
 
 ### Data Types:
