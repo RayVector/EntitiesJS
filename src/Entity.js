@@ -154,28 +154,29 @@ export class Entity {
   /**
    * patch data
    * @param data
+   * @param payload used for certain fields
    * @param queryParams
    * @param leftFields
    * @returns {Promise<*>}
    */
-  async update (data = {}, queryParams, leftFields = []) {
+  async update (data = {}, payload = null,  queryParams, leftFields = []) {
     // reject api call
     if (this.$loadingController !== null) {
       this.$loadingController.abort()
       this.$loadingController = null
     }
     // create payload
-    const payload = this.createApiPayload(data, leftFields)
+    const dataPayload = payload ? payload : this.createApiPayload(data, leftFields)
     if (!$validateEntityApiEnabled(this)) {
       $createError('api is disabled')
       return
     }
-    this.updateLoadingByData(true, payload)
+    this.updateLoadingByData(true, dataPayload)
     this.changeApiLoadingStatus(true)
-    const res = await this.$update(this, payload, null, queryParams)
+    const res = await this.$update(this, dataPayload, null, queryParams)
     this.changeApiLoadingStatus(false)
-    this.updateLoadingByData(false, payload)
-    this.updated(payload, res)
+    this.updateLoadingByData(false, dataPayload)
+    this.updated(dataPayload, res)
     this.updateState(res)
     return res
   }
@@ -409,9 +410,7 @@ const $setLoadingStates = (entity) => {
 
 // func for debouncer
 const $updateDebouncedField = (v, entity, entityKey) => {
-  (function (entity, v) {
-    entity.update(v)
-  }(entity, v, entityKey))
+  entity.update({}, { [entityKey]: v })
 }
 
 const $validate = (entity) => {

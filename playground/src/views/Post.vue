@@ -8,8 +8,6 @@
       <br>
       <br>
       <div v-if="state.itemToEdit !== null">
-        {{ state.itemToEdit.$isApiLoading }} <br>
-        {{ state.itemToEdit.$loadingStates.title.$isLoading }} <br>
         <span v-if="state.itemToEdit.$loadingStates.title.$isLoading">loading</span>
         <label>
           title
