@@ -10,7 +10,7 @@ export default class Post extends Entity {
   $options = {
     api: {
       alias: 'posts',
-      watcherEnabled: true,
+      watcherEnabled: false,
       isLoadingStatesEnabled: true
     }
   }
