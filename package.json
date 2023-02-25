@@ -1,6 +1,6 @@
 {
   "name": "entitiesjs",
-  "version": "6.0.0",
+  "version": "6.0.1",
   "description": "EntitiesJs - it's a framework for work with data",
   "main": "index.js",
   "module": "index.js",
