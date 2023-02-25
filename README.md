@@ -132,7 +132,10 @@ export default class Project extends Entity {
   })
 
   onMounted(async () => {
-    state.postList = await $entityList(Post)
+    state.postList = await $entityList(Post, {
+      limit: 5,
+      page: 2
+    })
   })
 </script>
 
