@@ -48,11 +48,21 @@ export class ApiGql extends ApiMethod {
   }
 }
 
+export class ApiGqlGet extends ApiGql {
+  method = 'POST'
+  async invoke (entity, baseUrl, alias, id) {
+    const { queryParams, queryVariables, aliasForOne } = entity.$options.api.gql
+    const body = new ApiGqlQuery().buildQuery(entity, alias, queryParams, queryVariables, id, aliasForOne)
+    const options = new ApiGQLFetchOptions(this.method, entity.$options.api.headers, JSON.stringify(body))
+    return await this.call(entity, baseUrl, alias, options)
+  }
+}
+
 export class ApiGqlPost extends ApiGql {
   method = 'POST'
-  async invoke (entity, value, field, baseUrl, alias, id) {
-    const {queryParams, variables, aliasForOne} = entity.$options.api.gql
-    let body = new ApiGqlQuery().buildQuery(entity, alias, queryParams, variables, id, aliasForOne)
+  async invoke (entity, value, field, baseUrl, alias) {
+    const { mutationUpdateParams } = entity.$options.api.gql
+    const body = new ApiGqlQuery().buildMutation(entity, mutationUpdateParams, { value, field })
     const options = new ApiGQLFetchOptions(this.method, entity.$options.api.headers, JSON.stringify(body))
     return await this.call(entity, baseUrl, alias, options)
   }
@@ -99,20 +109,22 @@ export class ApiGqlQuery extends ApiGql {
     }
   }
 
-  // todo gql mutation
-  buildMutation () {
-    let query = `mutation (
-      $id: ID!,
-      $data: UpdatePostInput!
-    ) {
-      updatePost(id: $id, data: $data) {
-        id
-        body
+  buildMutation (entity, { name, dataType, updateField }, { value, field }) {
+    const data = Object.keys(entity.$fields).join(' ')
+    const payload = typeof value === 'object' ? value : { [field]: value }
+    const variables = {
+      id: Number(entity.id),
+      [updateField]: payload
+    }
+    let query = `mutation ($id: ID!, $${updateField}: ${dataType}) {
+      ${name} (id: $id, ${updateField}: $${updateField}) {
+        ${data}
       }
     }`
     return {
       operationName: null,
-      query
+      query,
+      variables
     }
   }
 }
@@ -121,8 +133,20 @@ export class ApiGqlHooks extends ApiHooks {
   async read (entity, id = null) {
     if (ApiHooks.validateEntity(entity)) {
       const { baseUrl, alias, gql } = entity.$options.api
-      const res = await new ApiGqlPost().invoke(entity, null, null, baseUrl, alias, id)
+      const res = await new ApiGqlGet().invoke(entity, baseUrl, alias, id)
       if (id !== null) {
+        return res.data[gql.aliasForOne]
+      }
+      return res.data[alias].data
+    }
+  }
+
+  async update (entity, value, field) {
+    console.log('update')
+    if (ApiHooks.validateEntity(entity)) {
+      const { baseUrl, alias, gql } = entity.$options.api
+      const res = await new ApiGqlPost().invoke(entity, value, field, baseUrl, alias)
+      if (entity.id !== null) {
         return res.data[gql.aliasForOne]
       }
       return res.data[alias].data

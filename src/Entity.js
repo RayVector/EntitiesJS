@@ -59,7 +59,7 @@ export class EntityOptions {
     headers: null,
     gql: {
       aliasForOne: null,
-      variables: {},
+      queryVariables: {},
       queryParams: {}
     }
   }

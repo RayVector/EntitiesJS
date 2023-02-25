@@ -9,8 +9,26 @@ export default class Post extends Entity {
 
   $options = {
     api: {
-      alias: 'posts',
-      watcherEnabled: true
+      alias: 'posts', // <-- alias required!
+      gql: {
+        aliasForOne: 'post',
+        queryVariables: {
+          "options": {
+            "paginate": {
+              "page": 1,
+              "limit": 5
+            }
+          }
+        },
+        queryParams: {
+          options: 'PageQueryOptions'
+        },
+        mutationUpdateParams: {
+          name: 'updatePost',
+          dataType: 'UpdatePostInput!',
+          updateField: 'input'
+        }
+      }
     }
   }
 
