@@ -334,10 +334,9 @@ export const colorValueHandler = (entity, field, value) => {
   return value.match(regx) !== null
 }
 ```
-### GQL api schema type:
-```javascript
-import { Entity, dataTypes, $prepare } from '../../../src'
 
+### Enable watcher for certain entity:
+```javascript
 export default class Post extends Entity {
   $fields = {
     id: dataTypes.ID,
@@ -347,21 +346,8 @@ export default class Post extends Entity {
 
   $options = {
     api: {
-      alias: 'posts', // <-- alias required!
-      gql: {
-        aliasForOne: 'post', // alias for one entity
-        variables: {
-          "options": {
-            "paginate": {
-              "page": 1,
-              "limit": 5
-            }
-          }
-        },
-        queryParams: {
-          options: 'PageQueryOptions'
-        }
-      }
+      alias: 'posts',
+      watcherEnabled: true
     }
   }
 
@@ -370,7 +356,6 @@ export default class Post extends Entity {
     $prepare(this, props)
   }
 }
-
 ```
 ## API Documentation:
 

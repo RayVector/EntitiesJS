@@ -1,6 +1,6 @@
 export const deepPopulate = (a, b) => {
   for (const field in b) {
-    if (typeof b[field] === 'object') {
+    if (typeof b[field] === 'object' && a[field] !== undefined) {
       deepPopulate(a[field], b[field])
     } else {
       if (typeof a[field] === 'undefined') {
