@@ -20,13 +20,8 @@
           <input type="text" v-model="state.itemToEdit.body">
         </label>
         <br>
-        <label>
-          body2
-          <input type="text" v-model="fields.body">
-        </label>
         <br>
-        <br>
-        <button @click="state.itemToEdit.update(fields)">
+        <button @click="state.itemToEdit.update()">
           send
         </button>
       </div>
@@ -48,16 +43,10 @@ const state = reactive({
   itemToEdit: null
 })
 
-let fields = reactive({
-  title: null,
-  body: null
-})
-
 onMounted(async () => {
   state.isPostLoading = true
   const itemId = Number(route.params.id)
   state.itemToEdit = await $readById(Post, itemId)
-  fields = state.itemToEdit.createState(fields)
   state.isPostLoading = false
 })
 
