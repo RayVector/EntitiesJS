@@ -60,6 +60,8 @@ export class EntityOptions {
     // headers
     headers: null,
     gql: {
+      queries: {},
+      mutations: {},
       aliasForOne: null,
       queryVariables: {},
       queryParams: {}

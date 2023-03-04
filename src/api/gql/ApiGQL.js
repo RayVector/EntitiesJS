@@ -71,61 +71,11 @@ export class ApiGqlPost extends ApiGql {
 
 export class ApiGqlQuery extends ApiGql {
   buildQuery (entity, alias, queryParams, variables, id = null, aliasForOne) {
-    const data = Object.keys(entity.$fields).join(' ')
-    let queryParamsString = ''
-    for (const field in queryParams) {
-      queryParamsString += `$${field}: ${queryParams[field]},`
-    }
-    let aliasOptions = ''
-    let mainAlias = alias
-    // id
-    if (id !== null) {
-      mainAlias = aliasForOne
-      for (const field in queryParams) {
-        aliasOptions = `id: ${Number(id)}`
-      }
-    } else {
-      for (const field in queryParams) {
-        aliasOptions += `${field}: $${field}`
-      }
-    }
-    let query = `query (${queryParamsString}) {
-          ${mainAlias} (${aliasOptions}) {
-            data { ${data} }
-          }
-        }`
-    // id
-    if (id !== null) {
-      query = `
-        query {
-          ${mainAlias} (${aliasOptions}) {${data}}
-        }
-      `
-    }
-    return {
-      operationName: null,
-      query,
-      variables
-    }
+
   }
 
   buildMutation (entity, { name, dataType, updateField }, { value, field }) {
-    const data = Object.keys(entity.$fields).join(' ')
-    const payload = typeof value === 'object' ? value : { [field]: value }
-    const variables = {
-      id: Number(entity.id),
-      [updateField]: payload
-    }
-    let query = `mutation ($id: ID!, $${updateField}: ${dataType}) {
-      ${name} (id: $id, ${updateField}: $${updateField}) {
-        ${data}
-      }
-    }`
-    return {
-      operationName: null,
-      query,
-      variables
-    }
+
   }
 }
 

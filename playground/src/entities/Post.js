@@ -1,5 +1,34 @@
 import { Entity, dataTypes, $prepare } from '../../../src'
 
+
+const getAllPostsQuery = () => {
+  return {
+    aliasForOne: 'post',
+    queryVariables: {
+      "options": {
+        "paginate": {
+          "page": 1,
+          "limit": 5
+        }
+      }
+    },
+    queryParams: {
+      options: 'PageQueryOptions'
+    },
+    mutationUpdateParams: {
+      name: 'updatePost',
+      dataType: 'UpdatePostInput!',
+      updateField: 'input'
+    }
+  }
+}
+
+const updatePostMutation = () => {
+  return {
+
+  }
+}
+
 export default class Post extends Entity {
   $fields = {
     id: dataTypes.ID,
@@ -11,22 +40,11 @@ export default class Post extends Entity {
     api: {
       alias: 'posts', // <-- alias required!
       gql: {
-        aliasForOne: 'post',
-        queryVariables: {
-          "options": {
-            "paginate": {
-              "page": 1,
-              "limit": 5
-            }
-          }
+        queries: {
+          getAllPosts: getAllPostsQuery
         },
-        queryParams: {
-          options: 'PageQueryOptions'
-        },
-        mutationUpdateParams: {
-          name: 'updatePost',
-          dataType: 'UpdatePostInput!',
-          updateField: 'input'
+        mutations: {
+          updatePost: updatePostMutation
         }
       }
     }
