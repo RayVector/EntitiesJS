@@ -32,7 +32,10 @@ const state = reactive({
 
 onMounted(async () => {
   state.isPostsLoading = true
-  state.postList = await $entityList(Post)
+  state.postList = await $entityList(Post, {
+    limit: 5,
+    page: 2
+  })
   state.isPostsLoading = false
 })
 

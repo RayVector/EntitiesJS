@@ -53,5 +53,6 @@ export {
   $prepare,
   $entityPollingList,
   $setEntityValue,
-  $validateEntityApiEnabled
+  $validateEntityApiEnabled,
+  $createState
 } from './Entity'

@@ -54,6 +54,8 @@ export class EntityOptions {
     // polling time to auto updating
     pollingTime: 0,
     pollingId: null,
+    // filter payload by diffs
+    isFilterByDiffs: false,
     isLoadingStatesEnabled: false,
     // headers
     headers: null,
@@ -154,27 +156,38 @@ export class Entity {
   /**
    * patch data
    * @param data
+   * @param payload used for certain fields
    * @param queryParams
    * @param leftFields
    * @returns {Promise<*>}
    */
-  async update (data = {}, queryParams, leftFields = []) {
+  async update (data = {}, payload = null,  queryParams, leftFields = []) {
     // reject api call
     if (this.$loadingController !== null) {
       this.$loadingController.abort()
       this.$loadingController = null
     }
-    const payload = this.createApiPayload(data, leftFields)
+    // create payload
+    let dataPayload = payload ? payload : this.createApiPayload(data, leftFields)
+    // find diffs
+    if (this.$options.api.isFilterByDiffs) {
+      for (const field in data) {
+        if (this[field] !== data[field]) {
+          dataPayload = {}
+          dataPayload[field] = data[field]
+        }
+      }
+    }
     if (!$validateEntityApiEnabled(this)) {
       $createError('api is disabled')
       return
     }
+    this.updateLoadingByData(true, dataPayload)
     this.changeApiLoadingStatus(true)
-    this.updateLoadingByData(true, payload)
-    const res = await this.$update(this, payload, null, queryParams)
+    const res = await this.$update(this, dataPayload, null, queryParams)
     this.changeApiLoadingStatus(false)
-    this.updateLoadingByData(false, payload)
-    this.updated(payload, res)
+    this.updateLoadingByData(false, dataPayload)
+    this.updated(dataPayload, res)
     this.updateState(res)
     return res
   }
@@ -408,9 +421,7 @@ const $setLoadingStates = (entity) => {
 
 // func for debouncer
 const $updateDebouncedField = (v, entity, entityKey) => {
-  (function (entity, v, entityKey) {
-    entity.$update(entity, v, entityKey)
-  }(entity, v, entityKey))
+  entity.update({}, { [entityKey]: v })
 }
 
 const $validate = (entity) => {
@@ -556,4 +567,13 @@ export const $validateEntityApiEnabled = (entity = {}, throwError = true) => {
 const $setOptions = (entity) => {
   // new options will rewrite global options
   deepPopulate(entity.$options, Entity.globalOptions)
+}
+
+export const $createState = (Entity, data = {}) => {
+  const entity = new Entity()
+  const payload = entity.createPayload()
+  if (!Object.keys(data).length) {
+    return payload
+  }
+  return deepEmptyPopulate(payload, data)
 }

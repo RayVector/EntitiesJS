@@ -132,7 +132,10 @@ export default class Project extends Entity {
   })
 
   onMounted(async () => {
-    state.postList = await $entityList(Post)
+    state.postList = await $entityList(Post, {
+      limit: 5,
+      page: 2
+    })
   })
 </script>
 
@@ -348,6 +351,28 @@ export default class Post extends Entity {
     api: {
       alias: 'posts',
       watcherEnabled: true
+    }
+  }
+
+  constructor(props) {
+    super(props)
+    $prepare(this, props)
+  }
+}
+```
+### You can send changed fields for payload to .update(payload):
+```javascript
+export default class Post extends Entity {
+  $fields = {
+    id: dataTypes.ID,
+    title: dataTypes.STRING,
+    body: dataTypes.STRING
+  }
+
+  $options = {
+    api: {
+      alias: 'posts',
+      isFilterByDiffs: true
     }
   }
 
