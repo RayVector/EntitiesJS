@@ -16,6 +16,11 @@ const routes = [
     path: '/post/:id',
     name: 'post',
     component: () => import('../views/Post.vue')
+  },
+  {
+    path: '/no-api',
+    name: 'noapi',
+    component: () => import('../views/NoApi.vue')
   }
 ]
 
