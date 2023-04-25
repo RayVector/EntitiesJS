@@ -13,6 +13,11 @@ const routes = [
     component: () => import('../views/Posts.vue')
   },
   {
+    path: '/post-auto/:id',
+    name: 'postAuto',
+    component: () => import('../views/PostAuto.vue')
+  },
+  {
     path: '/post/:id',
     name: 'post',
     component: () => import('../views/Post.vue')

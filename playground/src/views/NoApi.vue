@@ -16,7 +16,7 @@
         </label>
         <br>
         <br>
-        <button>
+        <button @click="onSubmit">
           send
         </button>
       </div>
@@ -25,13 +25,17 @@
 </template>
 
 <script setup>
-import { onMounted, reactive } from "vue";
-import { $createState } from "../../../src";
-import Item from "@/entities/Item";
+import { onMounted, reactive } from "vue"
+import { $createState } from "../../../src"
+import Item from "@/entities/Item"
 
 const state = reactive({
   itemToEdit: $createState(Item)
 })
+
+const onSubmit = () => {
+  console.log(1, state.itemToEdit)
+}
 
 onMounted(() => {
   state.itemToEdit = new Item()
