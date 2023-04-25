@@ -8,7 +8,7 @@ export default class Item extends Entity {
   }
 
   constructor(props) {
-    super(props)
+    super()
     $prepare(this, props)
   }
 }

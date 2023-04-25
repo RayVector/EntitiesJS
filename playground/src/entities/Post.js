@@ -16,7 +16,7 @@ export default class Post extends Entity {
   }
 
   constructor(props) {
-    super(props)
+    super()
     $prepare(this, props)
   }
 }
