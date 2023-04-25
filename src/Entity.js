@@ -1,3 +1,5 @@
+// todo: vue state (loadingsState) doesn't update after entity update function
+
 /**
  * EntitiesJs - it's a framework for work with data,
  * including strong data typing layer,
@@ -11,15 +13,8 @@
  */
 import errors from './configs/errors'
 
-/**
- * module: utils
- */
-import { debounce } from './utils/debounce'
-
 import { deepEmptyPopulate, deepPopulate, populateSelf } from './utils/population'
 import { falsyCheck } from "./utils/falsyCheck";
-
-let apiDebouncer = null
 
 /**
  * module: api interface
@@ -104,15 +99,13 @@ export class Entity {
   $item = null
 
   constructor (data, options = null) {
-    new Promise((res) => {
-      if (options !== null) $setOptions(this)
-      res()
-    }).then(() => {
+    if (options !== null) $setOptions(this)
+    setTimeout(() => {
       if ($validateEntityApiEnabled(this)) {
         // set API hooks if api is enabled
         Object.assign(this, new EntityApi(Entity.apiSchema))
       }
-    })
+    }, 0)
   }
 
 
@@ -367,7 +360,7 @@ export const $readById = (Entity, id = null) => {
  * @param extValues
  * @returns {{$isPrepared}|*}
  */
-export const $prepare = (entity, extValues) => {
+export const $prepare = (entity, extValues = {}) => {
   $setOptions(entity)
   // set custom options in class description way
   // validate entity required $fields
@@ -383,7 +376,9 @@ export const $prepare = (entity, extValues) => {
   // set $fields and values
   $setWatchers(entity)
   // set external pre-values
-  if (!entity.$isPrepared) $init(entity, extValues)
+  if (!entity.$isPrepared) {
+    $init(entity, extValues)
+  }
   // entity completed
   entity.$isPrepared = true
   // call created lifecycle hook
@@ -444,9 +439,6 @@ const $init = (entity, newData = {}) => {
       entity[entityKey] = entity.$fields[entityKey].default
     }
   }
-  if ($validateEntityApiEnabled(entity, false)) {
-    apiDebouncer = debounce($updateDebouncedField, entity?.$options?.api?.debounceTime)
-  }
 }
 
 /**
@@ -479,8 +471,9 @@ export const $setEntityValue = async (entity, entityKey, value) => {
           entity.changeApiLoadingStatus(false)
           entity.updateLoadingByData(false, {}, entityKey)
         } else {
-          apiDebouncer(value, entity, entityKey)
           entity['_' + entityKey] = value
+          entity.update({}, {[entityKey]: value})
+          entity = await entity.read(entity.id)
         }
       } else {
         // set value
@@ -491,12 +484,14 @@ export const $setEntityValue = async (entity, entityKey, value) => {
         fieldsValue.handler(value)
       }
       // resolve promises if value is promise
-      if (entity['_' + entityKey] !== null && typeof entity['_' + entityKey].then === 'function') {
-        entity['_' + entityKey].then(res => {
-          entity['_' + entityKey] = res[entityKey]
-          entity.changeApiLoadingStatus(false)
-          entity.updateLoadingByData(false, {}, entityKey)
-        })
+      if (entity['_' + entityKey] !== null || entity['_' + entityKey] !== undefined) {
+        if (typeof entity['_' + entityKey].then === 'function') {
+          entity['_' + entityKey].then(res => {
+            entity['_' + entityKey] = res[entityKey]
+            entity.changeApiLoadingStatus(false)
+            entity.updateLoadingByData(false, {}, entityKey)
+          })
+        }
       }
     }
   } else {
